@@ -153,26 +153,43 @@ class Tree:
                             
                 queue.append(cur.right)
             
+    def btreeGameWinningMove(self, root, n, x) -> bool:
+        # Find the subtree sizes using DFS
+        def count_nodes(node):
+            if not node:
+                return 0
+            left_size = count_nodes(node.left)
+            right_size = count_nodes(node.right)
+            if node.data == x:
+                self.left_size = left_size
+                self.right_size = right_size
+            return 1 + left_size + right_size
         
+        # Compute subtree sizes
+        self.left_size = 0
+        self.right_size = 0
+        res = count_nodes(root)
+        
+        # Parent subtree size
+        parent_size = n - (self.left_size + self.right_size + 1)
+        
+        # Check if the second player can control more than half the nodes
+        max_control = max(self.left_size, self.right_size, parent_size)
+        return max_control > n // 2
 
 
 t1 = Tree()
 t2 = Tree()
+t1.insert(1)
 t1.insert(2)
+t1.insert(3)
+t1.insert(4)
+t1.insert(5)
+t1.insert(6)
+t1.insert(7)
+t1.insert(8)
+t1.insert(9)
 t1.insert(10)
-t1.insert(21)
-t1.insert(13)
-t1.insert(23)
-t1.insert(33)
-t1.insert(42)
-t1.insert(35)
-t1.insert(23)
-t1.insert(30)
-print(t1.inorder_traversal(t1.root))
+t1.insert(11)
 print(t1.preorder_traversal(t1.root))
-print(t1.postorder_traversal(t1.root))
-print(t1.level_traversal(t1.root))
-print(t1.height(t1.root))
-print(t1.search( 87))
-t1.delete(10)
-print(t1.postorder_traversal(t1.root))
+print(t1.btreeGameWinningMove(t1.root, 11, 2))
